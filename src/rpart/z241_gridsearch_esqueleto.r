@@ -73,7 +73,7 @@ ArbolEstimarGanancia <- function(semilla, param_basicos) {
 
 ArbolesMontecarlo <- function(semillas, param_basicos) {
   # la funcion mcmapply  llama a la funcion ArbolEstimarGanancia
-  #  tantas veces como valores tenga el vector  ksemillas
+  #  tantas veces como valores tenga el vector  PARAM$semillas
   ganancias <- mcmapply(ArbolEstimarGanancia,
     semillas, # paso el vector de semillas
     MoreArgs = list(param_basicos), # aqui paso el segundo parametro
@@ -89,7 +89,7 @@ ArbolesMontecarlo <- function(semillas, param_basicos) {
 #------------------------------------------------------------------------------
 
 # Aqui se debe poner la carpeta de la computadora local
-setwd("X:\\gdrive\\ITBA2023B\\") # Establezco el Working Directory
+setwd("~/buckets/b1") # Establezco el Working Directory
 # cargo los datos
 
 # cargo los datos
@@ -122,27 +122,31 @@ cat(
 
 for (vmax_depth in c(4, 6, 8, 10, 12, 14)) {
   for (vmin_split in c(1000, 800, 600, 400, 200, 100, 50, 20, 10)) {
-    # notar como se agrega
-
-    # vminsplit  minima cantidad de registros en un nodo para hacer el split
-    param_basicos <- list(
-      "cp" = -0.5, # complejidad minima
-      "minsplit" = vmin_split,
-      "minbucket" = 5, # minima cantidad de registros en una hoja
-      "maxdepth" = vmax_depth
-    ) # profundidad máxima del arbol
-
-    # Un solo llamado, con la semilla 17
-    ganancia_promedio <- ArbolesMontecarlo(ksemillas, param_basicos)
-
-    # escribo los resultados al archivo de salida
-    cat(
-      file = archivo_salida,
-      append = TRUE,
-      sep = "",
-      vmax_depth, "\t",
-      vmin_split, "\t",
-      ganancia_promedio, "\n"
-    )
+    for (c_p in c(-1, -0.5, -0.01, 1)) {
+      for(vmin_bucket in c(5, 10, 20, 50, 100, 200, 400, 600, 800, 1000)) {
+        # notar como se agrega
+        
+        # vminsplit  minima cantidad de registros en un nodo para hacer el split
+        param_basicos <- list(
+          "cp" = c_p, # complejidad minima
+          "minsplit" = vmin_split,
+          "minbucket" = vmin_bucket, # minima cantidad de registros en una hoja
+          "maxdepth" = vmax_depth
+        ) # profundidad máxima del arbol
+        
+        # Un solo llamado, con la semilla 17
+        ganancia_promedio <- ArbolesMontecarlo(PARAM$semillas, param_basicos)
+        
+        # escribo los resultados al archivo de salida
+        cat(
+          file = archivo_salida,
+          append = TRUE,
+          sep = "",
+          vmax_depth, "\t",
+          vmin_split, "\t",
+          ganancia_promedio, "\n"
+        )
+      }
+    }
   }
 }
