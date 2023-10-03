@@ -28,6 +28,11 @@ PARAM$finalmodel$feature_fraction <- 0.808818275
 PARAM$finalmodel$min_data_in_leaf <- 561
 PARAM$finalmodel$num_leaves <- 655
 
+#agrego los parámetros
+PARAM$finalmodel$lambda_l1 <- 0.354003722643214
+PARAM$finalmodel$lambda_l2 <- 0.161579411284227
+PARAM$finalmodel$min_data_in_leaf <- 561
+
 
 PARAM$finalmodel$max_bin <- 31
 
@@ -88,7 +93,11 @@ modelo <- lgb.train(
     num_leaves = PARAM$finalmodel$num_leaves,
     min_data_in_leaf = PARAM$finalmodel$min_data_in_leaf,
     feature_fraction = PARAM$finalmodel$feature_fraction,
-    seed = PARAM$finalmodel$semilla
+    seed = PARAM$finalmodel$semilla,
+    lambda_l1 = PARAM$finalmodel$lambda_l1,
+    lambda_l2 = PARAM$finalmodel$lambda_l2,
+    min_data_in_leaf = PARAM$finalmodel$min_data_in_leaf
+    
   )
 )
 
